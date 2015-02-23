@@ -1,0 +1,76 @@
+---
+title       : NY Marathon application
+subtitle    : 
+author      : 
+job         : 
+framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight.js  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : []            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+---
+
+
+## Instructions
+
+This is a sinple application that uses the Random sample of 2002 NYC Marathon 
+finishers dataset in the UsingR library. The data's original source is the 
+New York City Road Runners web site, http://www.nyrrc.org.  You must first 
+select a State or Country code and a gender of the finishers.  The application 
+is defaulted to NY as the State/Country code and Male as the gender code.  The 
+information on the right side of screen will list the mean time, standard deviation, 
+mean age, and number of finishers based on your input.  Also, a histogram of the 
+selected finishers times will appear at the top, and the list of runners, sorted 
+by their race finish order.  
+
+---
+
+## Application
+
+# The application uses the default layout configuration in the ui.R script.
+The application the sidebarLayout, sidebarLayout, and selectInput shiny UI Layouts
+to create and populate the selection information to produce a specific dataset
+```{r}
+    sidebarLayout(      
+      
+      sidebarPanel(
+        
+        selectInput(),
+        hr(),
+        helpText("Text")
+      ))
+```       
+Note: the code above is abbreviated.
+
+The code allows the user to select options that the server.R file will use to process the results
+
+---
+## Application continued
+
+The server.R file includes several reactive functions to process the code that UI outputs will use
+
+
+    target_gender <- reactive({
+      a <- nym.2002[ which( nym.2002$gender %in% input$gender & nym.2002$home %in% input$country ) , ]
+      a <- droplevels(a)
+      return(a)
+    })
+  
+    target_mean <- reactive({
+      b <- mean_m <- mean(target_gender()$time)
+      return(b)
+    })
+    target_age <- reactive({
+      ag <- mean_age <- mean(target_gender()$age)
+      return(ag)
+    })
+```  
+The ui.R uses produces results renders the results.
+
+---
+## Use of the Application
+This is a very simple application to calculate a few quick statstics for NYC Marthon users.  
+The application is best used as a starting point for deeper analysis of NYC Marthon users,
+for example,  a t.test analysis may be added to the application as a start another app
+to try to predict finishing times based on gender, age, and country.
