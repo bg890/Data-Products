@@ -50,7 +50,7 @@ The code allows the user to select options that the server.R file will use to pr
 
 The server.R file includes several reactive functions to process the code that UI outputs will use
 
-
+```{r}
     target_gender <- reactive({
       a <- nym.2002[ which( nym.2002$gender %in% input$gender & nym.2002$home %in% input$country ) , ]
       a <- droplevels(a)
